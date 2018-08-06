@@ -3,6 +3,8 @@ from ardos.core.ParticipantTypes import ParticipantTypes
 from ardos.net.NetworkClient import NetworkClient
 from ardos.net.NetworkReader import NetworkReader
 from ardos.net.NetworkWriter import NetworkWriter
+from ardos.instance.InstanceObject import InstanceObject
+from ardos.instance.InstanceObjectManager import InstanceObjectManager
 
 class ArdosServer(NetworkClient):
 	"""
@@ -15,8 +17,24 @@ class ArdosServer(NetworkClient):
 	def __init__(self):
 		super().__init__()
 
+		self.instanceObjectManager = InstanceObjectManager(self)
+
+		self.tempIdCount = 1
+		self.tempIdMax = 4294967294 # Max uint32 size - 1
+
 	def handleConnect(self):
 		self.generatePid()
+
+	def allocateTempId(self):
+		if (self.tempIdCount + 1 > self.tempIdMax):
+			print("Error: Max temp id allocation reached!")
+			self.tempIdCount = 1
+			return self.tempIdCount
+
+		tempId = self.tempIdCount
+		self.tempIdCount += 1
+
+		return tempId
 
 	def handleData(self, reader):
 		msgType = reader.readUint16()
@@ -42,3 +60,12 @@ class ArdosServer(NetworkClient):
 		writer.addUint16(pid)
 
 		self.send(writer)
+
+	def generateInstanceObject(self, iObject, parentId, zoneId):
+		# While the object is generating on the State Server, store it in temp memory.
+		# If the object failes to generate, it is deleted out of this memory.
+		# If it successfully generates, it is put into instance object memory.
+		tempId = self.allocateTempId()
+		self.instanceObjectManager.storeTempObject(tempId, iObject)
+
+		iObject.sendGenerateInstanceObject(self, tempId, parentId, zoneId)
