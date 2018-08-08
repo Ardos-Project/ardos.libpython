@@ -41,3 +41,19 @@ class NetworkReader:
 		self._index += 2
 
 		return read
+
+	def readInt32(self):
+		self.checkReadOverflow(4)
+
+		read = struct.unpack('<i', self._data[self._index : self._index + 4])[0]
+		self._index += 4
+
+		return read
+
+	def readUint32(self):
+		self.checkReadOverflow(4)
+
+		read = struct.unpack('<I', self._data[self._index : self._index + 4])[0]
+		self._index += 4
+
+		return read

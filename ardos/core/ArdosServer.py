@@ -43,6 +43,9 @@ class ArdosServer(NetworkClient):
 			pid = reader.readUint16()
 			self.subscribePid(pid)
 
+		elif (msgType == MsgTypes["STATE_SERVER_GENERATE_INSTANCE_RESP"]):
+			self.handleGenerateInstanceObjectResp(reader)
+
 	def generatePid(self):
 		writer = NetworkWriter()
 
@@ -68,4 +71,18 @@ class ArdosServer(NetworkClient):
 		tempId = self.allocateTempId()
 		self.instanceObjectManager.storeTempObject(tempId, iObject)
 
-		iObject.sendGenerateInstanceObject(self, tempId, parentId, zoneId)
+		iObject.sendGenerateInstanceObject(tempId, parentId, zoneId)
+
+	def handleGenerateInstanceObjectResp(self, reader):
+		# Were we successful in generating the instance object?
+		success = reader.readUint8()
+		tempId = reader.readUint32()
+
+		# If the state server accepted the generate, activate the temp object.
+		if (success):
+			instanceId = reader.readUint32()
+			self.instanceObjectManager.activateTempObject(tempId, instanceId)
+
+		# Otherwise, clear it out of memory.
+		else:
+			self.instanceObjectManager.deleteTempObject(tempId)

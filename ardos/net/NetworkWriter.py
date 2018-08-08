@@ -22,3 +22,9 @@ class NetworkWriter:
 
 	def addUint16(self, uint16):
 		self._data += struct.pack('<H', uint16)
+
+	def addInt32(self, int32):
+		self._data += struct.pack('<i', int32)
+
+	def addUint32(self, uint32):
+		self._data += struct.pack('<I', uint32)

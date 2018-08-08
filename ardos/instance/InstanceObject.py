@@ -5,10 +5,25 @@ from ardos.net.NetworkWriter import NetworkWriter
 
 class InstanceObject:
 
-	def __init__(self):
+	def __init__(self, parent):
+		self.parent = parent
+
+		self.instanceId = None
 		self.parentId = None
 		self.zoneId = None
-		self.instanceId = None
 
 	def sendGenerateInstanceObject(self, tempId, parentId, zoneId):
-		pass
+		self.parentId = parentId
+		self.zoneId = zoneId
+
+		writer = NetworkWriter()
+
+		writer.addUint16(ParticipantTypes["STATE_SERVER_PID"])
+		writer.addUint16(MsgTypes["STATE_SERVER_GENERATE_INSTANCE"])
+		writer.addUint32(tempId)
+		writer.addUint32(parentId)
+		writer.addUint32(zoneId)
+
+		# TODO: Pack required DC fields.
+
+		self.parent.send(writer)

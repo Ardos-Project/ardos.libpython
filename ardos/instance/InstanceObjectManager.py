@@ -28,12 +28,14 @@ class InstanceObjectManager:
 
 		self.tempId2iObject.remove(tempId)
 
-	def activateTempObject(self, tempId):
+	def activateTempObject(self, tempId, instanceId):
 		if tempId not in self.tempId2iObject:
 			print("Error: Attempted to activate non-existent TempId (%s)" % tempId)
 			return
 
 		iObject = self.tempId2iObject[tempId]
+
+		iObject.instanceId = instanceId
 
 		self.storeInstanceObject(iObject)
 		self.deleteTempObject(tempId)
