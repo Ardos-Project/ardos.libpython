@@ -12,17 +12,17 @@ class InstanceObject:
 		self.parentId = None
 		self.zoneId = None
 
-	def sendGenerateInstanceObject(self, tempId, parentId, zoneId):
-		self.parentId = parentId
-		self.zoneId = zoneId
+	def generateInstance(self, parentId, zoneId):
+		self.parent.generateInstanceObject(self, parentId, zoneId)
 
+	def sendGenerateInstanceObject(self, tempId):
 		writer = NetworkWriter()
 
 		writer.addUint16(ParticipantTypes["STATE_SERVER_PID"])
 		writer.addUint16(MsgTypes["STATE_SERVER_GENERATE_INSTANCE"])
 		writer.addUint32(tempId)
-		writer.addUint32(parentId)
-		writer.addUint32(zoneId)
+		writer.addUint32(self.parentId)
+		writer.addUint32(self.zoneId)
 
 		# TODO: Pack required DC fields.
 

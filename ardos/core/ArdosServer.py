@@ -71,7 +71,11 @@ class ArdosServer(NetworkClient):
 		tempId = self.allocateTempId()
 		self.instanceObjectManager.storeTempObject(tempId, iObject)
 
-		iObject.sendGenerateInstanceObject(tempId, parentId, zoneId)
+		# Set ParentId and ZoneId.
+		iObject.parentId = parentId
+		iObject.zoneId = zoneId
+
+		iObject.sendGenerateInstanceObject(tempId)
 
 	def handleGenerateInstanceObjectResp(self, reader):
 		# Were we successful in generating the instance object?
