@@ -17,6 +17,8 @@ class ArdosServer(NetworkClient):
 	def __init__(self):
 		super().__init__()
 
+		self.pid = None
+
 		self.instanceObjectManager = InstanceObjectManager(self)
 
 		self.tempIdCount = 1
@@ -55,7 +57,8 @@ class ArdosServer(NetworkClient):
 		self.send(writer)
 
 	def subscribePid(self, pid):
-		print("Got PID: " + str(pid))
+		self.pid = pid
+
 		writer = NetworkWriter()
 
 		writer.addUint16(ParticipantTypes["MESSAGE_DIRECTOR_PID"])

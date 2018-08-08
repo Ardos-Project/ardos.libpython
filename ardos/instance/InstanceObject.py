@@ -20,6 +20,7 @@ class InstanceObject:
 
 		writer.addUint16(ParticipantTypes["STATE_SERVER_PID"])
 		writer.addUint16(MsgTypes["STATE_SERVER_GENERATE_INSTANCE"])
+		writer.addUint16(self.parent.pid)
 		writer.addUint32(tempId)
 		writer.addUint32(self.parentId)
 		writer.addUint32(self.zoneId)
