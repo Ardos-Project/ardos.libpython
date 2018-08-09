@@ -4,6 +4,7 @@ from ardos.net.NetworkClient import NetworkClient
 from ardos.net.NetworkReader import NetworkReader
 from ardos.net.NetworkWriter import NetworkWriter
 from ardos.instance.InstanceObject import InstanceObject
+from ardos.dc.DCManager import DCManager
 from ardos.instance.InstanceObjectManager import InstanceObjectManager
 
 class ArdosServer(NetworkClient):
@@ -19,6 +20,7 @@ class ArdosServer(NetworkClient):
 
 		self.pid = None
 
+		self.dcManager = DCManager()
 		self.instanceObjectManager = InstanceObjectManager(self)
 
 		self.tempIdCount = 1
