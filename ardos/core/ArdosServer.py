@@ -15,7 +15,7 @@ class ArdosServer(NetworkClient):
 	"""
 
 	def __init__(self):
-		super().__init__()
+		NetworkClient.__init__(self)
 
 		self.pid = None
 
@@ -24,7 +24,7 @@ class ArdosServer(NetworkClient):
 		self.tempIdCount = 1
 		self.tempIdMax = 4294967294 # Max uint32 size - 1
 
-	def handleConnect(self):
+	def handle_connect(self):
 		self.generatePid()
 
 	def allocateTempId(self):
@@ -44,6 +44,7 @@ class ArdosServer(NetworkClient):
 		if (msgType == MsgTypes["MESSAGE_DIRECTOR_GENERATE_PID_RESP"]):
 			pid = reader.readUint16()
 			self.subscribePid(pid)
+			self.handleConnect()
 
 		elif (msgType == MsgTypes["STATE_SERVER_GENERATE_INSTANCE_RESP"]):
 			self.handleGenerateInstanceObjectResp(reader)

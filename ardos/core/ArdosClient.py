@@ -6,4 +6,4 @@ class ArdosClient(NetworkClient):
 	"""
 
 	def __init__(self):
-		super().__init__()
+		NetworkCleint.__init__(self)

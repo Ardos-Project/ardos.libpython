@@ -22,10 +22,10 @@ class NetworkClient(asyncore.dispatcher):
 		self.thread.start()
 
 	def send(self, writer):
-		super().send(writer.getData())
+		asyncore.dispatcher.send(self, writer.getData())
 
 	def handle_connect(self):
-		self.handleConnect()
+		pass
 
 	def handle_close(self):
 		self.close()
@@ -42,7 +42,7 @@ class NetworkClient(asyncore.dispatcher):
 		return (len(self.buffer) > 0)
 
 	def handle_write(self):
-		sent = super().send(self.buffer)
+		sent = asyncore.dispatcher.send(self, self.buffer)
 		self.buffer = self.buffer[sent:]
 
 	"""
