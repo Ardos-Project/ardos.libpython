@@ -12,7 +12,10 @@ class DCHashGenerator:
 		self.index = (self.index + 1) % self.maxPrimeNumbers # Enforce our max prime limit.
 
 	def addString(self, value):
-		pass
+		self.addInt(len(value))
+		chars = list(value)
+		for char in chars:
+			self.addInt(ord(char))
 
 	def getHash(self):
 		return (self.hash & 0xffffffff) # uint32 hash.
