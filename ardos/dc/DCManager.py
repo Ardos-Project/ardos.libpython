@@ -1,3 +1,4 @@
+from ardos.dc.DCHashGenerator import DCHashGenerator
 from ardos.dc.DCFile import DCFile
 
 class DCManager:
@@ -9,7 +10,26 @@ class DCManager:
 	"""
 
 	def __init__(self):
-		pass
+		# Hash Generator.
+		self.hashGenerator = DCHashGenerator()
+
+		# Known dclass's. Helps with inheritance.
+		self.dclasses = set()
+
+		# Dict of {TypeDef Identifier: TypeDef Value}
+		self.typedefs = {}
 
 	def loadDCFile(self, path):
 		dc = DCFile(self, path)
+
+	def addTypeDef(self, name, value):
+		if name in self.typedefs:
+			# Duplicate typedefs are okay, as long as we have the same value.
+			if value != self.typedefs[name]:
+				print("Error: Duplicate typedef '%s' with different values '%s and %s'" % (name, self.typedefs[name], value))
+				return
+
+		self.typedefs[name] = value
+		
+	def addDClass(self, name, data):
+		print("New DClass %s - %s" % (name, data))

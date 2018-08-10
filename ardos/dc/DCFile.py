@@ -9,6 +9,7 @@ class DCFile:
 		self.name = ''
 
 		self.jsonData = None
+		self.sortedClasses = []
 
 		self.loadDCFile()
 
@@ -38,7 +39,8 @@ class DCFile:
 			return
 
 		for typedef in self.jsonData["typedefs"]:
-			print("typedef: %s" % typedef)
+			# For now, just push it straight into our typedef table.
+			self.parent.addTypeDef(typedef, self.jsonData["typedefs"][typedef])
 
 	def loadStructs(self):
 		if 'structs' not in self.jsonData:
@@ -54,4 +56,13 @@ class DCFile:
 			return
 
 		for dclass in self.jsonData["classes"]:
-			print("dclass: %s" % dclass)
+			# Add the dclass as a known dclass.
+			self.parent.dclasses.add(dclass)
+			# We have to order the classes first before assigning them ID's.
+			self.sortedClasses.append(dclass)
+
+		# Sort the classes.
+		self.sortedClasses.sort()
+
+		for dclass in self.sortedClasses:
+			self.parent.addDClass(dclass, self.jsonData["classes"][dclass])
