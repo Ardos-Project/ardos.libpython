@@ -2,17 +2,24 @@
   "typedefs": {
     "DoId": "uint32"
   },
+  
   "structs": {
     "test": "null"
   },
+  
   "classes": {
+  
     "DistributedTestObject": {
       "type": "IO/GO/CL",
-      "inherits": "DistributedBaseObject",
-      "methods": [
-        "dropObject(DoId test = 1) required broadcast db",
-        "setDNA()"
-      ]
+      "methods": {
+		"testMethod": {
+			"keywords": "",
+			"args": {
+				"DoId": "test = 1"
+			}
+		}
+      }
     }
+	
   }
 }

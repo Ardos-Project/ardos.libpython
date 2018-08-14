@@ -64,5 +64,11 @@ class DCFile:
 		# Sort the classes.
 		self.sortedClasses.sort()
 
+		# Generate each DClass in sorted order.
 		for dclass in self.sortedClasses:
 			self.parent.addDClass(dclass, self.jsonData["classes"][dclass])
+
+		# Load inherited methods. Can only be done once each class has been generated.
+		# This is done by order of definition in the DClass.
+		for dclass in self.jsonData["classes"]:
+			self.parent.dclassesByName[dclass].loadInheritedMethods()

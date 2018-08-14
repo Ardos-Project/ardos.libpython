@@ -1,5 +1,6 @@
 from ardos.dc.DCHashGenerator import DCHashGenerator
 from ardos.dc.DCFile import DCFile
+from ardos.dc.DClass import DClass
 
 class DCManager:
 	"""
@@ -10,6 +11,9 @@ class DCManager:
 	"""
 
 	def __init__(self):
+		#DClass index.
+		self.dclassIndex = 1
+
 		# Hash Generator.
 		self.hashGenerator = DCHashGenerator()
 
@@ -19,8 +23,14 @@ class DCManager:
 		# Dict of {TypeDef Identifier: TypeDef Value}
 		self.typedefs = {}
 
+		# Dict of {DClass Name: DClass Object}
+		self.dclassesByName = {}
+
+		# Dict of {DClass Id: DClass Object}
+		self.dclassesById = {}
+
 	def loadDCFile(self, path):
-		dc = DCFile(self, path)
+		DCFile(self, path)
 
 	def addTypeDef(self, name, value):
 		if name in self.typedefs:
@@ -32,4 +42,34 @@ class DCManager:
 		self.typedefs[name] = value
 		
 	def addDClass(self, name, data):
-		print("New DClass %s - %s" % (name, data))
+		# If we have inheritance that isn't in our list of all dclasses, the class doesn't exist.
+		# NOTE: This will trigger if you don't load dc files in the right order.
+		# TODO: Multi-inheritance.
+		if 'inherits' in data:
+			if data["inherits"] not in self.dclasses:
+				print("Error: Could not generate DClass '%s'. Missing inheritance '%s'" % (name, data["inherits"]))
+				return
+
+		# Make sure this DClass doesn't already exist in memory.
+		# NOTE: This will most likely trigger if you have duplicate class names across dc files.
+		if name in self.dclassesByName:
+			print("Error: Could not generate DClass '%s'. It has already been defined")
+			return
+
+		# Attempt to generate the DClass.
+		try:
+			dclass = DClass(self, name, data)
+		except Exception as e:
+			print("Error: Could not generate DClass '%s'. %s" % (name, e))
+			return
+
+		dclass.dclassIndex = self.dclassIndex
+
+		# Store the DClass in memory.
+		self.dclassesByName[name] = dclass
+		self.dclassesById[self.dclassIndex] = dclass
+
+		self.dclassIndex += 1
+
+		print("Dclasses By Name: %s" % self.dclassesByName)
+		print("Dclasses By Id: %s" % self.dclassesById)
