@@ -47,10 +47,10 @@ class DClass:
 		# Allocate Id's for each method.
 		for method in self.sortedMethods:
 			self.methodsById[self.methodIndex] = self.methodsByName[method]
+			self.methodsById[self.methodIndex].methodIndex = self.methodIndex
 			self.methodIndex += 1
 
 		print("DCMethods By Name: %s" % self.methodsByName)
-		print("DCMethods By Id: %s" % self.methodsById)
 
 	def loadInheritedMethods(self):
 		# Insert the methods of the inherited class into our methods.
@@ -69,5 +69,3 @@ class DClass:
 
 			self.methodsById[self.methodIndex] = method
 			self.methodIndex += 1
-
-		print("DCMethods By Id: %s" % self.methodsById)

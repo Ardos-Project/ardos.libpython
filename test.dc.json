@@ -13,9 +13,9 @@
       "type": "IO/GO/CL",
       "methods": {
 		"testMethod": {
-			"keywords": "",
+			"keywords": "required",
 			"args": {
-				"DoId": "test = 1"
+				"test": "DoId = 1"
 			}
 		}
       }

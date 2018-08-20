@@ -65,6 +65,9 @@ class DCManager:
 
 		dclass.dclassIndex = self.dclassIndex
 
+		# Calculate the dclass name into the hash.
+		self.hashGenerator.addString(name)
+
 		# Store the DClass in memory.
 		self.dclassesByName[name] = dclass
 		self.dclassesById[self.dclassIndex] = dclass
@@ -72,4 +75,3 @@ class DCManager:
 		self.dclassIndex += 1
 
 		print("Dclasses By Name: %s" % self.dclassesByName)
-		print("Dclasses By Id: %s" % self.dclassesById)

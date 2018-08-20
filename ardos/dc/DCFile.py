@@ -26,12 +26,9 @@ class DCFile:
 		self.parseDCFile()
 
 	def parseDCFile(self):
-		try:
-			self.loadTypeDefs()
-			self.loadStructs()
-			self.loadDistributedObjects()
-		except:
-			raise
+		self.loadTypeDefs()
+		self.loadStructs()
+		self.loadDistributedObjects()
 
 	def loadTypeDefs(self):
 		if 'typedefs' not in self.jsonData:
