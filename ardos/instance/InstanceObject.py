@@ -5,8 +5,9 @@ from ardos.net.NetworkWriter import NetworkWriter
 
 class InstanceObject:
 
-	def __init__(self, parent):
+	def __init__(self, parent, dclassName):
 		self.parent = parent
+		self.dclassName = dclassName
 
 		self.instanceId = None
 		self.parentId = None
@@ -25,6 +26,10 @@ class InstanceObject:
 		writer.addUint32(self.parentId)
 		writer.addUint32(self.zoneId)
 
-		# TODO: Pack required DC fields.
+		# Pack this object's DClass id.
+		writer.addUint32(self.parent.dcManager.dclassesByName[self.dclassName].dclassIndex)
+
+		# Pack required DC methods.
+		self.parent.dcManager.packRequiredFields(self, writer)
 
 		self.parent.send(writer)

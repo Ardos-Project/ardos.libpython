@@ -10,12 +10,12 @@
   "classes": {
   
     "DistributedTestObject": {
-      "type": "IO/GO/CL",
       "methods": {
 		"testMethod": {
 			"keywords": "required",
 			"args": {
-				"test": "DoId = 1"
+				"test": "DoId = 1",
+				"test2": "DoId = 2"
 			}
 		}
       }

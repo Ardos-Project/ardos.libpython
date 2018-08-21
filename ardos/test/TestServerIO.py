@@ -4,7 +4,10 @@ from ardos.core.ArdosServer import ArdosServer
 class TestObjectIO(InstanceObject):
 
 	def __init__(self, parent):
-		InstanceObject.__init__(self, parent)
+		InstanceObject.__init__(self, parent, 'DistributedTestObject')
+
+	def getTestMethod(self):
+		return [None, None]
 
 
 class TestServerIO(ArdosServer):

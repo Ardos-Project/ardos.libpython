@@ -75,3 +75,66 @@ class DCManager:
 		self.dclassIndex += 1
 
 		print("Dclasses By Name: %s" % self.dclassesByName)
+
+	def packRequiredFields(self, distObject, writer):
+		for methodName in self.dclassesByName[distObject.dclassName].methodsByName:
+			method = self.dclassesByName[distObject.dclassName].methodsByName[methodName]
+
+			# If the method isn't marked as required, skip it.
+			if not method.hasKeyword("required"):
+				continue
+
+			# Pack the method id into our writer.
+			writer.addUint32(method.methodIndex)
+
+			# Pack each arg into our writer.
+			# This calls the actual pythonic function within the instance class.
+
+			# If the method is prefixed with set, change it to get.
+			if (methodName[:3] == 'set'):
+				methodName = 'get' + methodName[3:]
+
+			# Otherwise, reformat our name and manually add 'get' to it.
+			else:
+				# Prepend 'get' to our method name.
+				methodName = 'get' + methodName[:]
+
+				# Uppercase the character preceding 'get'.
+				# Purely to follow conventions.
+				methodName = methodName[:3] + methodName[3].capitalize() + methodName[4:]
+
+			# Get our value(s) from the function (or it's default as defined in the dc file).
+			try:
+				values = getattr(distObject, methodName)()
+			except:
+				print("Missing required function '%s' in '%s'" % (methodName, distObject.dclassName))
+				raise
+
+			# Are we dealing with an array or a single value?
+			if isinstance(values, list):
+				index = 0
+				for arg in values:
+					# If the value is none, get it's possible default.
+					if arg == None:
+						try:
+							default = method.args[index].split(' = ')[1]
+							values[index] = default
+							index += 1
+						except:
+							print("Missing one or more required values in '%s' of '%s'" % (methodName, distObject.dclassName))
+							return
+					else:
+						index += 1
+
+			else:
+				# If the value is none, get it's possible default.
+				if values == None:
+					try:
+						default = method.args[0].split(' = ')[1]
+						values = default
+					except:
+						print("Missing required value '%s' in '%s'" % (methodName, distObject.dclassName))
+						return
+
+			print("Method arg: %s" % values)
+			print("Method name: %s" % methodName)
