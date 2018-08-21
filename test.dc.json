@@ -1,16 +1,15 @@
 {
   "typedefs": {
-    "DoId": "uint32"
+	"DoId": "uint32"
   },
   
   "structs": {
-    "test": "null"
+	"test": "null"
   },
   
   "classes": {
   
     "DistributedTestObject": {
-      "methods": {
 		"testMethod": {
 			"keywords": "required",
 			"args": {
@@ -18,7 +17,6 @@
 				"test2": "DoId = 2"
 			}
 		}
-      }
     }
 	
   }

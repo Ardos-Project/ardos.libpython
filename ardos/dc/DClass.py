@@ -25,14 +25,10 @@ class DClass:
 		self.loadMethods()
 
 	def loadMethods(self):
-		# We might not have any methods defined due to inheritance.
-		if 'methods' not in self.data:
-			return
-
 		# Generate each DCMethod.
-		for method in self.data["methods"]:
+		for method in self.data:
 			try:
-				dcMethod = DCMethod(self, method, self.data["methods"][method])
+				dcMethod = DCMethod(self, method, self.data[method])
 				self.methodsByName[method] = dcMethod
 			except Exception as e:
 				print("Error: Could not generate DCMethod '%s'. %s" % (method, e))
