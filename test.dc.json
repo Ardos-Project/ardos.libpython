@@ -13,8 +13,8 @@
 		"testMethod": {
 			"keywords": "required",
 			"args": {
-				"test": "DoId = 1",
-				"test2": "DoId = 2"
+				"test": "uint32 = 1",
+				"test2": "uint32 = 2"
 			}
 		}
     }

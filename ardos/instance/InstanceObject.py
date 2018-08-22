@@ -27,7 +27,7 @@ class InstanceObject:
 		writer.addUint32(self.zoneId)
 
 		# Pack this object's DClass id.
-		writer.addUint32(self.parent.dcManager.dclassesByName[self.dclassName].dclassIndex)
+		writer.addUint16(self.parent.dcManager.dclassesByName[self.dclassName].dclassIndex)
 
 		# Pack required DC methods.
 		self.parent.dcManager.packRequiredFields(self, writer)

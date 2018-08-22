@@ -1,4 +1,5 @@
 from ardos.dc.DCHashGenerator import DCHashGenerator
+from ardos.dc.DCDataTypes import DCDataTypes
 from ardos.dc.DCFile import DCFile
 from ardos.dc.DClass import DClass
 
@@ -16,6 +17,9 @@ class DCManager:
 
 		# Hash Generator.
 		self.hashGenerator = DCHashGenerator()
+
+		# Data Types.
+		self.dataTypes = DCDataTypes()
 
 		# Known dclass's. Helps with inheritance.
 		self.dclasses = set()
@@ -85,7 +89,7 @@ class DCManager:
 				continue
 
 			# Pack the method id into our writer.
-			writer.addUint32(method.methodIndex)
+			writer.addUint16(method.methodIndex)
 
 			# Pack each arg into our writer.
 			# This calls the actual pythonic function within the instance class.
@@ -119,12 +123,15 @@ class DCManager:
 						try:
 							default = method.args[index].split(' = ')[1]
 							values[index] = default
-							index += 1
 						except:
 							print("Missing one or more required values in '%s' of '%s'" % (methodName, distObject.dclassName))
 							return
-					else:
-						index += 1
+
+					# Pack the args into our writer.
+					argType = method.args[index].split(' = ')[0]
+					self.dataTypes.packArg(writer, argType, values[index])
+					index += 1
+
 
 			else:
 				# If the value is none, get it's possible default.
@@ -135,6 +142,10 @@ class DCManager:
 					except:
 						print("Missing required value '%s' in '%s'" % (methodName, distObject.dclassName))
 						return
+
+				# Pack the arg into our writer.
+				argType = method.args[0].split(' = ')[0]
+				self.dataTypes.packArg(writer, argType, values)
 
 			print("Method arg: %s" % values)
 			print("Method name: %s" % methodName)
