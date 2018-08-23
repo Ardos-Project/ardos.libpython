@@ -26,7 +26,7 @@ class InstanceObjectManager:
 			print("Error: Attempted to delete non-existent object with TempId (%s)" % tempId)
 			return
 
-		self.tempId2iObject.remove(tempId)
+		del self.tempId2iObject[tempId]
 
 	def activateTempObject(self, tempId, instanceId):
 		if tempId not in self.tempId2iObject:
@@ -75,8 +75,8 @@ class InstanceObjectManager:
 		zoneId = iObject.zoneId
 
 		# Remove the object from memory.
-		self.instanceId2iObject.remove(instanceId)		
-		self.localInstanceIds.remove(instanceId)
+		del self.instanceId2iObject[instanceId]
+		del self.localInstanceIds[instanceId]
 
 		parentDict = self.locationDict.get(parentId)
 		if parentDict is None:
@@ -93,7 +93,7 @@ class InstanceObjectManager:
 			return
 
 		# We can finally delete the object out of the locationDict.
-		zoneDict.remove(instanceId)
+		del zoneDict[instanceId]
 
 		# Cleanup.
 		if len(zoneDict) == 0:
