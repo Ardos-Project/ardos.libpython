@@ -17,10 +17,6 @@ class NetworkClient(asyncore.dispatcher):
 		self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.buffer = bytes()
 
-		self.thread = threading.Thread(target=asyncore.loop, kwargs={'timeout':1})
-		self.thread.daemon = True
-		self.thread.start()
-
 	def send(self, writer):
 		asyncore.dispatcher.send(self, writer.getData())
 

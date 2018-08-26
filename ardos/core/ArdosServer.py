@@ -24,7 +24,7 @@ class ArdosServer(NetworkClient):
 		self.instanceObjectManager = InstanceObjectManager(self)
 
 		self.tempIdCount = 1
-		self.tempIdMax = 4294967294 # Max uint32 size - 1
+		self.tempIdMax = 0xffffffff # Max uint32 size.
 
 	def handle_connect(self):
 		self.generatePid()

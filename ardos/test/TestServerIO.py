@@ -1,3 +1,6 @@
+import time
+import asyncore
+
 from ardos.instance.InstanceObject import InstanceObject
 from ardos.core.ArdosServer import ArdosServer
 
@@ -21,8 +24,7 @@ class TestServerIO(ArdosServer):
 
 		self.testObject = TestObjectIO(self)
 
-		while True:
-			continue
+		asyncore.loop()
 
 	def handleConnect(self):
 		ArdosServer.handleConnect(self)

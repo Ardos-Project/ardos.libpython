@@ -1,7 +1,7 @@
 class DCHashGenerator:
 
 	def __init__(self):
-		self.maxHashSize = 4294967295 # Maximum hash size (uint32)
+		self.maxHashSize = 0xffffffff # Maximum hash size (uint32)
 		self.maxPrimeNumbers = 10000 # Maximum prime number limit.
 		self.primes = [2]
 		self.hash = 0
